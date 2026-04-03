@@ -2,26 +2,49 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CachorroConsumido</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DogFinder - App</title>
+    <meta name="description" content="Encontre fotos adoráveis do seu próximo cachorro!">
+    <meta name="theme-color" content="#4F46E5">
+    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   </head>
   <body>
-    <section>
-      <h1>Cachorro</h1>
+    <main>
+      <header>
+        <div class="logo">🐶</div>
+        <h1>DogFinder</h1>
+        <p>Ache o seu companheiro ideal</p>
+      </header>
 
-      <select id="selectRaca" onchange="CachorroAleatorio(this.value)">
-        <option value="">-- escolha uma raça --</option>
-      </select>
+      <section class="controls">
+        <label for="selectRaca" class="sr-only">Escolha uma raça</label>
+        <div class="select-wrapper">
+          <select id="selectRaca" onchange="CachorroAleatorio(this.value)" aria-label="Escolha uma raça de cachorro">
+            <option value="">Qualquer Raça</option>
+          </select>
+        </div>
+        
+        <button id="btnFetch" onclick="CachorroAleatorio(document.getElementById('selectRaca').value)">
+          <span class="icon">🐾</span> Buscar Novo Cão
+        </button>
+      </section>
 
-      <br><br>
-      <button onclick="CachorroAleatorio(document.getElementById('selectRaca').value)">
-        Clique em mim
-      </button>
+      <section class="image-container">
+        <div id="loader" class="loader" style="display: none;"></div>
+        <img id="imgCachorro" src="" alt="Foto incrível de um cachorro" style="display: none; opacity: 0; transition: opacity 0.5s ease-in;">
+      </section>
 
-      <br><br>
-      <img id="imgCachorro" src="" alt="cachorro aleatório">
-    </section>
+      <div class="actions" id="actions" style="display: none;">
+        <button id="btnShare" class="btn-secondary" onclick="compartilhar()">
+          <span class="icon">📤</span> Compartilhar
+        </button>
+      </div>
+    </main>
 
     <script src="script.js"></script>
   </body>
