@@ -1,22 +1,18 @@
-// Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Service Worker Registrado!', reg.scope))
-      .catch(err => console.error('Erro ao registrar Service Worker:', err));
+      .catch(err => console.error('sw fail:', err));
   });
 }
 
 function vibrarHardware() {
-  // Integração recomendada: Hardware feature (Vibration API)
   if (navigator.vibrate) {
-    // Vibra por 50ms (suave) em dispositivos mobile compativeis
     navigator.vibrate(50);
   }
 }
 
 async function CachorroAleatorio(breed = '') {
-  vibrarHardware(); // Feedback tátil imediato
+  vibrarHardware();
 
   const url = breed
     ? `https://dog.ceo/api/breed/${breed}/images/random`
@@ -27,7 +23,6 @@ async function CachorroAleatorio(breed = '') {
   const btnFetch = document.getElementById('btnFetch');
   const actions = document.getElementById('actions');
 
-  // Loading state
   img.style.opacity = '0';
   img.style.display = 'none';
   loader.style.display = 'block';
@@ -39,7 +34,6 @@ async function CachorroAleatorio(breed = '') {
     const res = await fetch(url);
     const data = await res.json();
     
-    // Aguarda o onload da imagem para remover loader
     img.onload = () => {
       loader.style.display = 'none';
       img.style.display = 'block';
@@ -50,15 +44,14 @@ async function CachorroAleatorio(breed = '') {
       actions.style.display = 'block';
     }
 
-    // Dispara carregamento
     img.src = data.message;
 
   } catch (error) {
-    console.error("Erro ao buscar cachorro", error);
+    console.error(error);
     loader.style.display = 'none';
     btnFetch.disabled = false;
     btnFetch.innerHTML = '<span class="icon">⚠️</span> Tentar Novamente';
-    alert("Infelizmente não conseguimos carregar um novo cãozinho. Verifique a conexão.");
+    alert("Sem conexão.");
   }
 }
 
@@ -72,38 +65,48 @@ async function listarRacas() {
     Object.keys(data.message).forEach(raca => {
       const option = document.createElement('option');
       option.value = raca;
-      // Capitalize
       option.textContent = raca.charAt(0).toUpperCase() + raca.slice(1);
       select.appendChild(option);
     });
   } catch(e) {
-    console.error("Erro ao listar raças", e);
+    console.error(e);
   }
 }
 
-async function compartilhar() {
+// ... existing functions ...
+function compartilhar() {
   const img = document.getElementById('imgCachorro');
   if (!img.src) return;
 
-  // Integração 2: Web Share API (Comum em Mobile/PWA)
   if (navigator.share) {
     try {
-      await navigator.share({
+      navigator.share({
         title: 'Olha que cachorro fofo!',
-        text: 'Encontrei este cãozinho adorável no DogFinder App.',
+        text: 'Encontrei este cãozinho adorável',
         url: img.src
       });
-      console.log('Compartilhado com sucesso!');
     } catch (error) {
-      console.log('Erro ao compartilhar:', error);
     }
   } else {
-    // Fallback simples
     navigator.clipboard.writeText(img.src);
-    alert('Link da imagem copiado para a área de transferência!');
+    alert('Link copiado!');
+  }
+}
+
+function pegarLocalizacao() {
+  if ("geolocation" in navigator) {
+    navigator.geolocation.getCurrentPosition((position) => {
+      const lat = position.coords.latitude.toFixed(4);
+      const lon = position.coords.longitude.toFixed(4);
+      alert(`O hardware de GPS detectou sua localização (Lat: ${lat}, Lon: ${lon}). Buscando cães virtuais próximos à você!`);
+      CachorroAleatorio();
+    }, () => {
+      alert("Acesso ao hardware de GPS negado.");
+    });
+  } else {
+    alert("Geolocalização não suportada.");
   }
 }
 
 listarRacas();
-// Inicia com um cãozinho automaticamente ao abrir a página
 CachorroAleatorio();

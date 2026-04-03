@@ -2,13 +2,15 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DogFinder - App</title>
     <meta name="description" content="Encontre fotos adoráveis do seu próximo cachorro!">
     <meta name="theme-color" content="#4F46E5">
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts -->
+    
+    <!-- Preconnects para performance (LCP) -->
+    <link rel="preconnect" href="https://dog.ceo" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
@@ -36,16 +38,19 @@
 
       <section class="image-container">
         <div id="loader" class="loader" style="display: none;"></div>
-        <img id="imgCachorro" src="" alt="Foto incrível de um cachorro" style="display: none; opacity: 0; transition: opacity 0.5s ease-in;">
+        <img id="imgCachorro" src="" alt="Foto incrível de um cachorro" fetchpriority="high" style="display: none; opacity: 0; transition: opacity 0.5s ease-in;">
       </section>
 
-      <div class="actions" id="actions" style="display: none;">
+      <div class="actions" id="actions" style="display: none; gap: 10px; flex-direction: column;">
         <button id="btnShare" class="btn-secondary" onclick="compartilhar()">
           <span class="icon">📤</span> Compartilhar
+        </button>
+        <button id="btnLocation" class="btn-secondary" onclick="pegarLocalizacao()">
+          <span class="icon">📍</span> Cães na minha região (GPS)
         </button>
       </div>
     </main>
 
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
   </body>
 </html>
