@@ -38,10 +38,11 @@ async function CachorroAleatorio(breed = '') {
       loader.style.display = 'none';
       img.style.display = 'block';
       setTimeout(() => img.style.opacity = '1', 50);
+
       
       btnFetch.disabled = false;
       btnFetch.innerHTML = '<span class="icon">🐾</span> Buscar Novo Cão';
-      actions.style.display = 'block';
+      actions.style.display = 'flex';
     }
 
     img.src = data.message;
